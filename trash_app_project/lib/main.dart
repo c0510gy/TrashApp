@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'trashcanlist.dart';
 
 void main() {
   runApp(MyApp());
@@ -76,10 +77,7 @@ class _MyHomePage extends State<MyHomePage> {
       '즐겨찾는 쓰레기통',
       style: TextStyle(fontSize: 30, fontFamily: 'DoHyeonRegular'),
     ),
-    Text(
-      '쓰레기통 목록',
-      style: TextStyle(fontSize: 30, fontFamily: 'DoHyeonRegular'),
-    ),
+    TrashCanListPage(),
     Text(
       '지도에서 찾기',
       style: TextStyle(fontSize: 30, fontFamily: 'DoHyeonRegular'),
