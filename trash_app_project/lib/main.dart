@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'trash_can_list_page.dart';
+import 'favorite_trash_cans_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -72,10 +73,7 @@ class _MyHomePage extends State<MyHomePage> {
   }
 
   List _widgetOptions = [
-    Text(
-      '즐겨찾는 쓰레기통',
-      style: TextStyle(fontSize: 30, fontFamily: 'DoHyeonRegular'),
-    ),
+    FavoriteteTrashCanListPage(),
     TrashCanListPage(),
     Text(
       '지도에서 찾기',

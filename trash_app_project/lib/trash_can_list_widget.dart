@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:csv/csv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TrashCanListWidget extends StatefulWidget {
-  final List<List<dynamic>> trashCans;
+  final bool favoriteOnly;
 
-  TrashCanListWidget({Key? key, required this.trashCans}) : super(key: key);
+  TrashCanListWidget({Key? key, required this.favoriteOnly}) : super(key: key);
 
   @override
-  _TrashCanListWidget createState() => _TrashCanListWidget(trashCans);
+  _TrashCanListWidget createState() => _TrashCanListWidget();
 }
 
 class _TrashCanListWidget extends State<TrashCanListWidget> {
@@ -29,14 +31,30 @@ class _TrashCanListWidget extends State<TrashCanListWidget> {
     await prefs.setStringList('favoriteList', _favoriteList);
   }
 
-  _TrashCanListWidget(List<List<dynamic>> trashCans) {
-    _trashCans = trashCans;
-    _trashCansOnList = trashCans;
+  void _loadCSV() async {
+    final _rawData = await rootBundle.loadString("assets/trashcanlist.csv");
+    final _trashCans = const CsvToListConverter().convert(_rawData).sublist(1);
+    setState(() {
+      _trashCansOnList = _trashCans;
+    });
+  }
+
+  _TrashCanListWidget() {
+    _loadCSV();
     _loadPrefs();
   }
 
   @override
   Widget build(BuildContext context) {
+    final trashCansOnList = widget.favoriteOnly
+        ? _trashCansOnList.where((row) {
+            final title = row[1];
+            final subtitle =
+                '${row[2].toString().replaceAll('\n', ' ')} ${row[3].toString().replaceAll('\n', ' ')}';
+            return _favoriteList.contains('${title}${subtitle}');
+          }).toList()
+        : _trashCansOnList;
+
     return Column(children: <Widget>[
       TextField(
         keyboardType: TextInputType.text,
@@ -61,12 +79,12 @@ class _TrashCanListWidget extends State<TrashCanListWidget> {
       Divider(),
       Expanded(
           child: ListView.builder(
-        itemCount: _trashCansOnList.length,
+        itemCount: trashCansOnList.length,
         itemBuilder: (_, index) {
           return Column(children: [
             _buildRow(
-              _trashCansOnList[index][1],
-              '${_trashCansOnList[index][2].toString().replaceAll('\n', ' ')} ${_trashCansOnList[index][3].toString().replaceAll('\n', ' ')}',
+              trashCansOnList[index][1],
+              '${trashCansOnList[index][2].toString().replaceAll('\n', ' ')} ${trashCansOnList[index][3].toString().replaceAll('\n', ' ')}',
             ),
             Divider(),
           ]);
