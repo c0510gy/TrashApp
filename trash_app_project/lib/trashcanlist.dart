@@ -10,12 +10,13 @@ class TrashCanListPage extends StatefulWidget {
 class _TrashCanListPage extends State<TrashCanListPage> {
   List<List<dynamic>> _trashCans = [];
   List<List<dynamic>> _trashCansOnList = [];
+  List<String> _favoriteList = [];
 
   void _loadCSV() async {
     final _rawData = await rootBundle.loadString("assets/trashcanlist.csv");
     _trashCans = const CsvToListConverter().convert(_rawData);
     setState(() {
-      _trashCansOnList = _trashCans;
+      _trashCansOnList = _trashCans.sublist(1);
     });
   }
 
@@ -30,7 +31,7 @@ class _TrashCanListPage extends State<TrashCanListPage> {
         keyboardType: TextInputType.text,
         onChanged: (text) {
           List<List<dynamic>> newData = [
-            _trashCans[0],
+            //_trashCans[0],
             ..._trashCans
                 .sublist(1)
                 .where((row) =>
@@ -42,16 +43,25 @@ class _TrashCanListPage extends State<TrashCanListPage> {
           });
         },
         decoration: InputDecoration(
-            hintText: '검색',
-            border: InputBorder.none,
-            icon: Padding(
-                padding: EdgeInsets.only(left: 13), child: Icon(Icons.search))),
+          hintText: '검색',
+          border: InputBorder.none,
+          icon: Padding(
+              padding: EdgeInsets.only(left: 13), child: Icon(Icons.search)),
+        ),
       ),
+      Divider(),
       Expanded(
           child: ListView.builder(
         itemCount: _trashCansOnList.length,
         itemBuilder: (_, index) {
-          return Card(
+          return Column(children: [
+            _buildRow(
+              _trashCansOnList[index][1],
+              '${_trashCansOnList[index][2].toString().replaceAll('\n', ' ')} ${_trashCansOnList[index][3].toString().replaceAll('\n', ' ')}',
+            ),
+            Divider(),
+          ]);
+          /*Card(
             margin: const EdgeInsets.all(3),
             color: index == 0 ? Colors.lightBlueAccent : Colors.white,
             child: ListTile(
@@ -62,9 +72,56 @@ class _TrashCanListPage extends State<TrashCanListPage> {
               trailing: Text(
                   _trashCansOnList[index][3].toString().replaceAll('\n', ' ')),
             ),
-          );
+          ); */
         },
       )),
     ]);
+  }
+
+  Widget _buildRow(String title, String subtitle) {
+    final hash = '${title}${subtitle}';
+    final isFavorite = _favoriteList.contains(hash);
+
+    return Container(
+      padding: const EdgeInsets.all(32),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    color: Colors.grey[500],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+              icon: Icon(
+                Icons.star,
+                color: isFavorite ? Colors.orange : Colors.grey,
+              ),
+              onPressed: () {
+                setState(() {
+                  isFavorite
+                      ? _favoriteList.remove(hash)
+                      : _favoriteList.add(hash);
+                });
+              }),
+        ],
+      ),
+    );
   }
 }
