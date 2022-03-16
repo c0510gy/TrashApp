@@ -33,7 +33,7 @@ class _TrashCanListWidget extends State<TrashCanListWidget> {
 
   void _loadCSV() async {
     final _rawData = await rootBundle.loadString("assets/trashcanlist.csv");
-    final _trashCans = const CsvToListConverter().convert(_rawData).sublist(1);
+    _trashCans = const CsvToListConverter().convert(_rawData).sublist(1);
     setState(() {
       _trashCansOnList = _trashCans;
     });
