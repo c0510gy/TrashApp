@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:csv/csv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TrashCanListPage extends StatefulWidget {
   @override
@@ -12,6 +13,22 @@ class _TrashCanListPage extends State<TrashCanListPage> {
   List<List<dynamic>> _trashCansOnList = [];
   List<String> _favoriteList = [];
 
+  late SharedPreferences prefs;
+
+  void _loadPrefs() async {
+    print('helloeoofoefoeofo');
+    prefs = await SharedPreferences.getInstance();
+    print(prefs);
+
+    setState(() {
+      _favoriteList = prefs.getStringList('favoriteList') ?? [];
+    });
+  }
+
+  void _setPrefs() async {
+    await prefs.setStringList('favoriteList', _favoriteList);
+  }
+
   void _loadCSV() async {
     final _rawData = await rootBundle.loadString("assets/trashcanlist.csv");
     _trashCans = const CsvToListConverter().convert(_rawData);
@@ -22,6 +39,7 @@ class _TrashCanListPage extends State<TrashCanListPage> {
 
   _TrashCanListPage() {
     _loadCSV();
+    _loadPrefs();
   }
 
   @override
@@ -118,6 +136,7 @@ class _TrashCanListPage extends State<TrashCanListPage> {
                   isFavorite
                       ? _favoriteList.remove(hash)
                       : _favoriteList.add(hash);
+                  _setPrefs();
                 });
               }),
         ],
