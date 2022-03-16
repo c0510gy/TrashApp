@@ -16,9 +16,7 @@ class _TrashCanListPage extends State<TrashCanListPage> {
   late SharedPreferences prefs;
 
   void _loadPrefs() async {
-    print('helloeoofoefoeofo');
     prefs = await SharedPreferences.getInstance();
-    print(prefs);
 
     setState(() {
       _favoriteList = prefs.getStringList('favoriteList') ?? [];
