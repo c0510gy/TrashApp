@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'trashcanlist.dart';
+import 'trash_can_list_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,7 +25,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePage extends State<MyHomePage> {
-
   int _selectedIndex = 0;
 
   @override

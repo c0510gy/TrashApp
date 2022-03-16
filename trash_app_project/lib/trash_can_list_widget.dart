@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:csv/csv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class TrashCanListPage extends StatefulWidget {
+class TrashCanListWidget extends StatefulWidget {
+  final List<List<dynamic>> trashCans;
+
+  TrashCanListWidget({Key? key, required this.trashCans}) : super(key: key);
+
   @override
-  _TrashCanListPage createState() => _TrashCanListPage();
+  _TrashCanListWidget createState() => _TrashCanListWidget(trashCans);
 }
 
-class _TrashCanListPage extends State<TrashCanListPage> {
+class _TrashCanListWidget extends State<TrashCanListWidget> {
   List<List<dynamic>> _trashCans = [];
   List<List<dynamic>> _trashCansOnList = [];
   List<String> _favoriteList = [];
@@ -27,16 +29,9 @@ class _TrashCanListPage extends State<TrashCanListPage> {
     await prefs.setStringList('favoriteList', _favoriteList);
   }
 
-  void _loadCSV() async {
-    final _rawData = await rootBundle.loadString("assets/trashcanlist.csv");
-    _trashCans = const CsvToListConverter().convert(_rawData);
-    setState(() {
-      _trashCansOnList = _trashCans.sublist(1);
-    });
-  }
-
-  _TrashCanListPage() {
-    _loadCSV();
+  _TrashCanListWidget(List<List<dynamic>> trashCans) {
+    _trashCans = trashCans;
+    _trashCansOnList = trashCans;
     _loadPrefs();
   }
 
@@ -47,9 +42,7 @@ class _TrashCanListPage extends State<TrashCanListPage> {
         keyboardType: TextInputType.text,
         onChanged: (text) {
           List<List<dynamic>> newData = [
-            //_trashCans[0],
             ..._trashCans
-                .sublist(1)
                 .where((row) =>
                     '${row[1]}${row[2]}${row[3]}'.toString().contains(text))
                 .toList()
@@ -77,18 +70,6 @@ class _TrashCanListPage extends State<TrashCanListPage> {
             ),
             Divider(),
           ]);
-          /*Card(
-            margin: const EdgeInsets.all(3),
-            color: index == 0 ? Colors.lightBlueAccent : Colors.white,
-            child: ListTile(
-              leading: Text(_trashCansOnList[index][0].toString()),
-              title: Text(_trashCansOnList[index][1]),
-              subtitle: Text(
-                  _trashCansOnList[index][2].toString().replaceAll('\n', ' ')),
-              trailing: Text(
-                  _trashCansOnList[index][3].toString().replaceAll('\n', ' ')),
-            ),
-          ); */
         },
       )),
     ]);
