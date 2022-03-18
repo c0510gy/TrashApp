@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:csv/csv.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'detail_page.dart';
+import '../pages/detail_page.dart';
+import '../services/local_storage_services.dart';
+import '../models/trash_can_model.dart';
 
 class TrashCanListWidget extends StatefulWidget {
   final bool favoriteOnly;
@@ -14,45 +13,30 @@ class TrashCanListWidget extends StatefulWidget {
 }
 
 class _TrashCanListWidget extends State<TrashCanListWidget> {
-  List<List<dynamic>> _trashCans = [];
-  List<List<dynamic>> _trashCansOnList = [];
+  List<TrashCan> _trashCans = [];
+  List<TrashCan> _trashCansOnList = [];
   List<String> _favoriteList = [];
 
-  late SharedPreferences prefs;
+  TrashCansManager _trashCansManager = TrashCansManager();
 
-  void _loadPrefs() async {
-    prefs = await SharedPreferences.getInstance();
-
-    setState(() {
-      _favoriteList = prefs.getStringList('favoriteList') ?? [];
-    });
-  }
-
-  void _setPrefs() async {
-    await prefs.setStringList('favoriteList', _favoriteList);
-  }
-
-  void _loadCSV() async {
-    final _rawData = await rootBundle.loadString("assets/trashcanlist.csv");
-    _trashCans = const CsvToListConverter().convert(_rawData).sublist(1);
+  void _loadTrashCans() async {
+    _trashCans = await _trashCansManager.loadTrashCans();
+    final favoriteList = await _trashCansManager.loadFavoriteList();
     setState(() {
       _trashCansOnList = _trashCans;
+      _favoriteList = favoriteList;
     });
   }
 
   _TrashCanListWidget() {
-    _loadCSV();
-    _loadPrefs();
+    _loadTrashCans();
   }
 
   @override
   Widget build(BuildContext context) {
     final trashCansOnList = widget.favoriteOnly
-        ? _trashCansOnList.where((row) {
-            final title = row[1];
-            final subtitle =
-                '${row[2].toString().replaceAll('\n', ' ')} ${row[3].toString().replaceAll('\n', ' ')}';
-            return _favoriteList.contains('${title}${subtitle}');
+        ? _trashCansOnList.where((e) {
+            return _favoriteList.contains(e.hash);
           }).toList()
         : _trashCansOnList;
 
@@ -60,10 +44,10 @@ class _TrashCanListWidget extends State<TrashCanListWidget> {
       TextField(
         keyboardType: TextInputType.text,
         onChanged: (text) {
-          List<List<dynamic>> newData = [
+          List<TrashCan> newData = [
             ..._trashCans
-                .where((row) =>
-                    '${row[1]}${row[2]}${row[3]}'.toString().contains(text))
+                .where((e) => '${e.districtName}${e.streetName}${e.location}'
+                    .contains(text))
                 .toList()
           ];
           setState(() {
@@ -83,10 +67,7 @@ class _TrashCanListWidget extends State<TrashCanListWidget> {
         itemCount: trashCansOnList.length,
         itemBuilder: (_, index) {
           return Column(children: [
-            _buildRow(
-              trashCansOnList[index][1],
-              '${trashCansOnList[index][2].toString().replaceAll('\n', ' ')} ${trashCansOnList[index][3].toString().replaceAll('\n', ' ')}',
-            ),
+            _buildRow(trashCansOnList[index]),
             Divider(),
           ]);
         },
@@ -94,8 +75,10 @@ class _TrashCanListWidget extends State<TrashCanListWidget> {
     ]);
   }
 
-  Widget _buildRow(String title, String subtitle) {
-    final hash = '${title}${subtitle}';
+  Widget _buildRow(TrashCan trashCan) {
+    final title = trashCan.districtName ?? '';
+    final subtitle = '${trashCan.streetName} ${trashCan.location}';
+    final hash = trashCan.hash;
     final isFavorite = _favoriteList.contains(hash);
 
     return InkWell(
@@ -139,7 +122,7 @@ class _TrashCanListWidget extends State<TrashCanListWidget> {
                       isFavorite
                           ? _favoriteList.remove(hash)
                           : _favoriteList.add(hash);
-                      _setPrefs();
+                      _trashCansManager.updateFavoriteList(_favoriteList);
                     });
                   }),
             ],

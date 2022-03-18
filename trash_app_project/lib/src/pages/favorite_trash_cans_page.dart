@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'trash_can_list_widget.dart';
+import '../components/trash_can_list_widget.dart';
 
 class FavoriteteTrashCanListPage extends StatefulWidget {
   @override
