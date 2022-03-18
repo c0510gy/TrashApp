@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import '../components/trash_can_list_widget.dart';
 
-class FavoriteteTrashCanListPage extends StatefulWidget {
-  @override
-  _FavoriteteTrashCanListPage createState() => _FavoriteteTrashCanListPage();
-}
-
-class _FavoriteteTrashCanListPage extends State<FavoriteteTrashCanListPage> {
+class FavoriteteTrashCanListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TrashCanListWidget(favoriteOnly: true);

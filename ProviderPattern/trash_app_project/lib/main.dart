@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'src/home.dart';
+import 'src/providers/bottom_navigation_provider.dart';
+import 'src/providers/trash_cans_provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,7 +17,17 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      home: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (_) => BottomNavigationProvider(),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => TrashCansProvider(),
+          )
+        ],
+        child: MyHomePage(),
+      ),
     );
   }
 }

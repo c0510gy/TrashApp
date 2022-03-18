@@ -11,25 +11,28 @@ class DetailPage extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Container(
-            padding: EdgeInsets.only(left: 10.0),
-            height: MediaQuery.of(context).size.height * 0.5,
-            decoration: new BoxDecoration(
-              image: new DecorationImage(
-                image: new AssetImage("garbage-cans.jpg"),
-                fit: BoxFit.cover,
-              ),
-            )),
+          padding: EdgeInsets.only(left: 10.0),
+          height: MediaQuery.of(context).size.height * 0.5,
+          decoration: new BoxDecoration(
+            image: new DecorationImage(
+              image: new AssetImage("garbage-cans.jpg"),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
         Container(
           height: MediaQuery.of(context).size.height * 0.5,
           padding: EdgeInsets.all(40.0),
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(color: Color.fromRGBO(58, 66, 86, .9)),
           child: Center(
-            child: Text(this.title,
-                style: TextStyle(
-                  fontSize: 32,
-                  color: Colors.white,
-                )),
+            child: Text(
+              this.title,
+              style: TextStyle(
+                fontSize: 32,
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
         Positioned(
@@ -41,7 +44,7 @@ class DetailPage extends StatelessWidget {
             },
             child: Icon(Icons.arrow_back, color: Colors.white),
           ),
-        )
+        ),
       ],
     );
   }
