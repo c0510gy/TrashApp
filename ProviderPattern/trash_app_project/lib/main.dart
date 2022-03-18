@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Trash App: 쓰레기앱',
+      title: 'Trash App: 쓰레기앱 - Provider',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
