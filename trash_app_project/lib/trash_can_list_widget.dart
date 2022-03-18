@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:csv/csv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'detail_page.dart';
 
 class TrashCanListWidget extends StatefulWidget {
   final bool favoriteOnly;
@@ -97,47 +98,52 @@ class _TrashCanListWidget extends State<TrashCanListWidget> {
     final hash = '${title}${subtitle}';
     final isFavorite = _favoriteList.contains(hash);
 
-    return Container(
-      padding: const EdgeInsets.all(32),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
+    return InkWell(
+        onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DetailPage(address: subtitle))),
+        child: Container(
+          padding: const EdgeInsets.all(32),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Text(
+                        title,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  ),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        color: Colors.grey[500],
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  subtitle,
-                  style: TextStyle(
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          IconButton(
-              icon: Icon(
-                Icons.star,
-                color: isFavorite ? Colors.orange : Colors.grey,
               ),
-              onPressed: () {
-                setState(() {
-                  isFavorite
-                      ? _favoriteList.remove(hash)
-                      : _favoriteList.add(hash);
-                  _setPrefs();
-                });
-              }),
-        ],
-      ),
-    );
+              IconButton(
+                  icon: Icon(
+                    Icons.star,
+                    color: isFavorite ? Colors.orange : Colors.grey,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isFavorite
+                          ? _favoriteList.remove(hash)
+                          : _favoriteList.add(hash);
+                      _setPrefs();
+                    });
+                  }),
+            ],
+          ),
+        ));
   }
 }
