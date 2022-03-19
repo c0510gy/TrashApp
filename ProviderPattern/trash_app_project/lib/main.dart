@@ -3,9 +3,10 @@ import 'package:provider/provider.dart';
 import 'src/home.dart';
 import 'src/providers/bottom_navigation_provider.dart';
 import 'src/providers/trash_cans_provider.dart';
+import 'src/config/config.dart';
 
 void main() {
-  runApp(MyApp());
+  Config.loadConfig().then(runApp(MyApp()));
 }
 
 class MyApp extends StatelessWidget {

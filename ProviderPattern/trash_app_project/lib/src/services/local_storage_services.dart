@@ -9,7 +9,8 @@ class TrashCansManager {
   TrashCansManager() {}
 
   Future<List<TrashCan>> loadTrashCans() async {
-    final _rawData = await rootBundle.loadString("assets/trashcanlist.csv");
+    final _rawData =
+        await rootBundle.loadString("assets/preprocessed_trashcanlist.csv");
     final _trashCans = const CsvToListConverter().convert(_rawData).sublist(1);
     return _trashCans.map((e) => TrashCan.fromCSVRow(e)).toList();
   }

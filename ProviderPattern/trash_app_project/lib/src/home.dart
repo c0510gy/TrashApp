@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'providers/bottom_navigation_provider.dart';
 import 'pages/trash_can_list_page.dart';
 import 'pages/favorite_trash_cans_page.dart';
+import 'pages/map_page.dart';
 
 class MyHomePage extends StatelessWidget {
   late final BottomNavigationProvider _bottomNavigationProvider;
@@ -10,10 +11,7 @@ class MyHomePage extends StatelessWidget {
   final List _widgetOptions = [
     FavoriteteTrashCanListPage(),
     TrashCanListPage(),
-    Text(
-      '지도에서 찾기',
-      style: TextStyle(fontSize: 30, fontFamily: 'DoHyeonRegular'),
-    ),
+    MapPage(),
     Text(
       '내 페이지',
       style: TextStyle(fontSize: 30, fontFamily: 'DoHyeonRegular'),
