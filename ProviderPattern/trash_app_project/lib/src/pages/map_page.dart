@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 import 'package:provider/provider.dart';
 
+import '../components/key_value_table_widget.dart';
 import '../models/trash_can_model.dart';
 import '../providers/trash_cans_provider.dart';
 import 'detail_page.dart';
@@ -74,38 +75,6 @@ class _MapPage extends State<MapPage> {
     );
   }
 
-  Widget _buildKeyValueTable(List<String> keys, List<String> values,
-      {double height = 20}) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: keys
-                .map((e) => SizedBox(child: Text(e), height: height))
-                .toList(),
-          ),
-          Column(
-            children: keys
-                .map((_) => SizedBox(
-                      child: VerticalDivider(color: Colors.black),
-                      height: height,
-                    ))
-                .toList(),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: values
-                .map((e) => SizedBox(child: Text(e), height: height))
-                .toList(),
-          )
-        ],
-      ),
-    );
-  }
-
   Widget _buildModalBottomSheet(TrashCan selectedTrashCan) {
     return Container(
       decoration: BoxDecoration(
@@ -152,13 +121,13 @@ class _MapPage extends State<MapPage> {
               ),
               child: Column(
                 children: [
-                  _buildKeyValueTable([
-                    '설치장소',
-                    '도로명주소'
-                  ], [
-                    '${selectedTrashCan.location ?? ''}',
-                    '${selectedTrashCan.roadAddress ?? ''}'
-                  ]),
+                  KeyValueTableWidget(
+                    keys: ['설치장소', '도로명주소'],
+                    values: [
+                      '${selectedTrashCan.location ?? ''}',
+                      '${selectedTrashCan.roadAddress ?? ''}'
+                    ],
+                  ),
                   Expanded(child: SizedBox()),
                   SizedBox(
                     width: double.infinity,

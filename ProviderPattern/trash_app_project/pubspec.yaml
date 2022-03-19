@@ -32,6 +32,7 @@ dependencies:
   provider: ^6.0.2
   naver_map_plugin:
     git: https://github.com/LBSTECH/naver_map_plugin.git
+  http: ^0.13.4
 
 dev_dependencies:
   flutter_test:

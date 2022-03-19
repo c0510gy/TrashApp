@@ -1,13 +1,14 @@
 import 'dart:convert';
-import 'dart:io';
+import 'package:flutter/services.dart';
 
 class Config {
-  static late final config;
+  static dynamic config;
 
   static loadConfig() async {
-    final configFile = File('assets/config.json');
-    final jsonString = await configFile.readAsString();
+    final jsonString = await rootBundle.loadString("assets/config.json");
     final dynamic jsonMap = jsonDecode(jsonString);
     config = jsonMap;
+
+    await Future.delayed(Duration(seconds: 1));
   }
 }
