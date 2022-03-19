@@ -15,7 +15,7 @@ class DetailPage extends StatelessWidget {
           height: MediaQuery.of(context).size.height * 0.5,
           decoration: new BoxDecoration(
             image: new DecorationImage(
-              image: new AssetImage("garbage-cans.jpg"),
+              image: new AssetImage("assets/garbage-cans.jpg"),
               fit: BoxFit.cover,
             ),
           ),
@@ -37,7 +37,7 @@ class DetailPage extends StatelessWidget {
         ),
         Positioned(
           left: 20.0,
-          top: 20.0,
+          top: 30.0,
           child: InkWell(
             onTap: () {
               Navigator.pop(context);
