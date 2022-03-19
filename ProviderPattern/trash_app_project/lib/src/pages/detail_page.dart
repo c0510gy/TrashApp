@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import '../models/trash_can_model.dart';
 
 class DetailPage extends StatelessWidget {
   final String title;
-  final String address;
+  final TrashCan trashCan;
 
-  DetailPage({Key? key, this.title = '쓰레기통 정보', required this.address})
+  DetailPage({Key? key, this.title = '쓰레기통 정보', required this.trashCan})
       : super(key: key);
 
   topContent(context) {
@@ -59,7 +60,7 @@ class DetailPage extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Text(
-              this.address,
+              this.trashCan.roadAddress ?? '',
               style: TextStyle(fontSize: 18.0),
             ),
           ],

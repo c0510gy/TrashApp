@@ -167,9 +167,8 @@ class _MapPage extends State<MapPage> {
                       onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => DetailPage(
-                                address:
-                                    '${selectedTrashCan.roadAddress ?? ''}')),
+                            builder: (context) =>
+                                DetailPage(trashCan: selectedTrashCan)),
                       ),
                     ),
                   ),

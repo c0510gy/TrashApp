@@ -60,7 +60,7 @@ class TrashCanListWidget extends StatelessWidget {
     return InkWell(
       onTap: () => Navigator.push(
         ctx,
-        MaterialPageRoute(builder: (context) => DetailPage(address: subtitle)),
+        MaterialPageRoute(builder: (context) => DetailPage(trashCan: trashCan)),
       ),
       child: Container(
         padding: const EdgeInsets.all(32),
